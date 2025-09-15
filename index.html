@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recriação Livelo (Slider Simples)</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* --- Reset Básico e Fontes --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* --- Cores Principais --- */
+        :root {
+            --livelo-pink: #e6007e;
+            --livelo-blue: #0033a0;
+            --text-dark: #333;
+            --text-light: #666;
+            --border-color: #e0e0e0;
+        }
+
+        /* --- Cabeçalho --- */
+        .top-bar {
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 12px;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background-color: #fff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--livelo-pink);
+            /* Substitua por sua tag img se tiver o logo */
+            /* img { height: 40px; } */
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 40px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .search-bar .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .user-actions .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            border: 2px solid var(--livelo-pink);
+        }
+
+        .btn-outline {
+            background-color: #fff;
+            color: var(--livelo-pink);
+        }
+
+        .btn-solid {
+            background-color: var(--livelo-pink);
+            color: #fff;
+        }
+
+        /* --- Navegação --- */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .main-nav ul {
+            display: flex;
+        }
+
+        .main-nav li a {
+            padding: 18px 16px;
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 3px solid transparent;
+        }
+
+        .main-nav li a:hover {
+            color: var(--livelo-pink);
+            border-bottom-color: var(--livelo-pink);
+        }
+
+        .nav-secondary-links {
+            font-size: 13px;
+            gap: 20px;
+        }
+        .nav-secondary-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Banner Slider --- */
+        main {
+            width: 100%;
+            max-width: 1920px; /* Limita a largura máxima como no site */
+            margin: 0 auto;
+        }
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 480px; /* Altura do banner, ajuste conforme necessário */
+            overflow: hidden;
+            background-color: #ddd; /* Cor de fundo enquanto as imagens carregam */
+        }
+
+        .slider-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .banner-slide {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center right; /* Alinha a imagem à direita, como na foto */
+            position: relative;
+        }
+
+        /* * -----------------------------------------------------------------
+         * AQUI É ONDE VOCÊ DEVE COLOCAR AS SUAS IMAGENS
+         * -----------------------------------------------------------------
+         * Descomente as linhas 'background-image' e coloque o caminho CORRETO
+         * para as suas imagens. Usei placeholders para o código funcionar.
+        */
+        #slide-1 {
+            /* background-image: url('/Imagem/Banner Institucional 1.png'); */
+            background-image: url('/Imagem/Banner\ Institucional\ 1.png'); /* Imagem de placeholder 1 */
+            background-color: var(--livelo-blue);
+        }
+
+        #slide-2 {
+            /* background-image: url('/Imagem/Banner Institucional 2.png'); */
+            background-image: url('/Imagem/Banner\ Institucional\ 2.png'); /* Imagem de placeholder 2 */
+            background-color: var(--livelo-pink);
+        }
+        
+        /* * ESTILOS DE TEXTO REMOVIDOS
+         * .slide-content, .slide-content h1, .slide-content p, 
+         * .slide-content .cta-button foram removidos
+         * pois o texto está na própria imagem.
+        */
+
+
+        /* --- Controles do Slider --- */
+        .slider-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            z-index: 10;
+        }
+        
+        .slider-control:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #prev-btn {
+            left: 20px;
+        }
+
+        #next-btn {
+            right: 20px;
+        }
+
+        #pause-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #fff;
+        }
+
+
+        /* --- Seção de Busca (Abaixo do Banner) --- */
+        .search-section {
+            width: 90%;
+            max-width: 1100px;
+            margin: -60px auto 0 auto; /* Sobrepõe o banner */
+            position: relative;
+            z-index: 20;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-tabs button {
+            flex: 1;
+            padding: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-light);
+            background-color: #f9f9f9;
+            border: none;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .search-tabs button.active {
+            color: var(--livelo-pink);
+            border-bottom-color: var(--livelo-pink);
+            background-color: #fff;
+        }
+
+        .search-form {
+            padding: 24px;
+            /* Aqui viriam os campos do formulário (origem, destino, datas, etc.) */
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>3600 e o dia da aproveita: ofertas imperdíveis no e dia do Shopping Livelo. <strong>Eu quero</strong></span>
+    </div>
+
+    <header class="main-header">
+        <div class="logo">livelo</div>
+        
+        <form class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Faça uma busca por produtos Livelo">
+        </form>
+
+        <div class="user-actions">
+            <button class="btn btn-outline">Criar Conta</button>
+            <button class="btn btn-solid">Fazer login</button>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <ul class="nav-main-links">
+            <li><a href="#">Ofertas</a></li>
+            <li><a href="#">Trocar pontos</a></li>
+            <li><a href="#">Juntar pontos</a></li>
+            <li><a href="#">Shopping Livelo</a></li>
+            <li><a href="#">Viagens</a></li>
+            <li><a href="#">Clube Livelo</a></li>
+            <li><a href="#">Conexao pontos</a></li>
+        </ul>
+        <ul class="nav-secondary-links">
+            <li><a href="#">Central de ajuda</a></li>
+            <li><a href="#">Para empresas</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="banner-container">
+            <div class="slider-wrapper">
+                
+                <div class="banner-slide" id="slide-1">
+                    </div>
+
+                <div class="banner-slide" id="slide-2">
+                    </div>
+
+            </div>
+
+            <button class="slider-control" id="prev-btn">&#10094;</button>
+            <button class="slider-control" id="next-btn">&#10095;</button>
+            <button id="pause-btn">||</button> <div class="slider-dots">
+                </div>
+        </div>
+    </main>
+
+    <section class="search-section">
+        <div class="search-tabs">
+            <button class="active"><i class="fas fa-plane"></i> Voos</button>
+            <button><i class="fas fa-hotel"></i> Hotéis</button>
+            <button><i class="fas fa-car"></i> Carros</button>
+            <button><i class="fas fa-suitcase-rolling"></i> Pacotes</button>
+        </div>
+        <div class="search-form">
+            <p>Campos do formulário de busca (Origem, Destino, Datas...) iriam aqui.</p>
+        </div>
+    </section>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliderWrapper = document.querySelector('.slider-wrapper');
+            const slides = document.querySelectorAll('.banner-slide');
+            const dotsContainer = document.querySelector('.slider-dots');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+
+            let currentIndex = 0;
+            let slideInterval;
+            let isPaused = false;
+            const slideCount = slides.length;
+
+            // 1. Criar os pontos de navegação
+            for (let i = 0; i < slideCount; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.dataset.index = i;
+                dotsContainer.appendChild(dot);
+            }
+            const dots = document.querySelectorAll('.dot');
+
+            // 2. Função para mostrar o slide
+            function showSlide(index) {
+                // Lógica de loop (se chegar ao fim, volta ao início, etc.)
+                if (index >= slideCount) {
+                    index = 0;
+                } else if (index < 0) {
+                    index = slideCount - 1;
+                }
+
+                // Move o "trilho"
+                sliderWrapper.style.transform = `translateX(-${index * 100}%)`;
+                
+                // Atualiza o ponto ativo
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[index].classList.add('active');
+
+                currentIndex = index;
+            }
+
+            // 3. Funções de navegação
+            function nextSlide() {
+                showSlide(currentIndex + 1);
+            }
+
+            function prevSlide() {
+                showSlide(currentIndex - 1);
+            }
+
+            // 4. Rotação automática
+            function startAutoSlide() {
+                slideInterval = setInterval(nextSlide, 5000); // Muda a cada 5 segundos
+            }
+
+            function stopAutoSlide() {
+                clearInterval(slideInterval);
+            }
+
+            // 5. Event Listeners (Ouvintes de eventos)
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                stopAutoSlide();
+                if (!isPaused) startAutoSlide();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                stopAutoSlide();
+                if (!isPaused) startAutoSlide();
+            });
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    showSlide(index);
+                    stopAutoSlide();
+                    if (!isPaused) startAutoSlide();
+                });
+            });
+
+            pauseBtn.addEventListener('click', () => {
+                if (isPaused) {
+                    startAutoSlide();
+                    pauseBtn.innerHTML = '||'; // Símbolo de pausa
+                    isPaused = false;
+                } else {
+                    stopAutoSlide();
+                    pauseBtn.innerHTML = '&#9658;'; // Símbolo de play
+                    isPaused = true;
+                }
+            });
+            
+            // Pausa ao passar o mouse sobre o banner
+            sliderWrapper.addEventListener('mouseenter', stopAutoSlide);
+            sliderWrapper.addEventListener('mouseleave', () => {
+                if (!isPaused) startAutoSlide();
+            });
+
+            // 6. Iniciar
+            showSlide(0);
+            startAutoSlide();
+        });
+    </script>
+
+</body>
+</html>
